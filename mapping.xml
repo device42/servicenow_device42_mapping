@@ -12,20 +12,18 @@
 
     <tasks>
 
-        <task enable="true" description="Copy from Servicenow to Device42">
+        <task enable="false" description="Copy from Servicenow to Device42">
             <api>
                 <resource target="serviceNow" method="GET" path="/api/now/table/cmdb_ci_aix_server"/>
-                <target model="device" target="device42" method="POST" update_method="PUT" path="/api/device"/>
+                <target model="device" target="device42" method="POST" update_method="PUT" path="/api/1.0/device/"/>
             </api>
 
-            <mapping callback="cmdb_ci_aix_server">
+            <mapping callback="to_d42" key="device_id" source="Devices">
                 <field resource="name" type="string" target="name"/>
                 <field resource="serial_number" type="string" target="serial_no"/>
-                <field resource="sys_id" type="string" target="uuid"/>
                 <field resource="classification" type="string" target="service_level"/>
                 <field resource="asset_tag" type="string" target="tags"/>
                 <field resource="mac_address" type="string" target="macaddress"/>
-                <field resource="ip_address" type="string" target="ip_addresses"/>
                 <field resource="cpu_count" type="integer" target="cpucount"/>
                 <field resource="cpu_core_count" type="interger" target="cpucore"/>
                 <field resource="cpu_speed" type="integer" target="cpupower"/>
@@ -39,30 +37,28 @@
             </mapping>
         </task>
 
-        <task enable="false" description="Copy from Device42 to Servicenow">
+        <task enable="true" description="Copy from Device42 to Servicenow">
             <api>
                 <target target="serviceNow" method="POST" update_method="PUT" path="/api/now/table/cmdb_ci_aix_server"/>
                 <resource model="device" target="device42" method="GET" path="/api/1.0/devices/all"/>
             </api>
 
-            <mapping callback="to_cmdb_ci_aix_server">
+            <mapping callback="from_d42" key="device_id" source="Devices">
                 <field resource="name" type="string" target="name"/>
                 <field resource="serial_no" type="string" target="serial_number"/>
-                <field resource="uuid" type="string" target="sys_id"/>
                 <field resource="service_level" type="string" target="classification"/>
                 <field resource="tags" type="string" target="asset_tag"/>
-                <field resource="macaddress" type="string" target="mac_address"/>
-                <field resource="ip_addresses" type="string" target="ip_address"/>
+                <field resource="mac_addresses" type="string" target="mac_address" element="0"/>
                 <field resource="cpucount" type="integer" target="cpu_count"/>
                 <field resource="cpucore" type="interger" target="cpu_core_count"/>
-                <field resource="cpupower" type="integer" target="cpu_speed"/>
-                <field resource="memory" type="float" target="ram"/>
+                <field resource="cpuspeed" type="integer" target="cpu_speed"/>
+                <field resource="ram" type="float" target="ram"/>
                 <field resource="hddsize" type="float" target="disk_space"/>
                 <field resource="os" type="string" target="os"/>
                 <field resource="osver" type="string" target="os_version"/>
                 <field resource="notes" type="string" target="short_description"/>
                 <field resource="manufacturer" type="string" target="model_id" sub_field="manufacturer" sub_field2="name"/>
-                <field resource="hardware" type="string" target="model_id" sub_field="name"/>
+                <field resource="hw_model" type="string" target="model_id" sub_field="name"/>
             </mapping>
         </task>
 

@@ -26,8 +26,8 @@ class ServiceNow(Service):
         elif method == 'POST':
             response = requests.post(self.url + path, {}, data, auth=(self.user, self.password), headers=headers)
             result = response.json()
-        elif method == 'PATCH':
-            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
+        elif method == 'PUT':
+            response = requests.put(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
             result = response.json()
         return result
 
@@ -47,8 +47,8 @@ class Device42(Service):
         elif method == 'POST':
             response = requests.post(self.url + path, data, headers=headers, verify=False)
             result = response.json()
-        elif method == 'PATCH':
-            response = requests.patch(self.url + path, data, headers=headers, verify=False)
+        elif method == 'PUT':
+            response = requests.put(self.url + path, data, headers=headers, verify=False)
             result = response.json()
         return result
 
@@ -60,7 +60,7 @@ def init_services(settings):
     }
 
 def task_execute(task, services):
-    print 'Execute task: ', task.attrib['description']
+    print 'Execute task:', task.attrib['description']
 
     _resource = task.find('api/resource')
     _target = task.find('api/target')
