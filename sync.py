@@ -29,6 +29,9 @@ class ServiceNow(Service):
         elif method == 'PUT':
             response = requests.put(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
             result = response.json()
+        elif method == 'PATCH':
+            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
+            result = response.json()
         return result
 
 
@@ -49,6 +52,9 @@ class Device42(Service):
             result = response.json()
         elif method == 'PUT':
             response = requests.put(self.url + path, data, headers=headers, verify=False)
+            result = response.json()
+        elif method == 'PATCH':
+            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
             result = response.json()
         return result
 
