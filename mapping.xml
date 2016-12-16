@@ -25,7 +25,7 @@
                 <field resource="asset_tag" type="string" target="tags"/>
                 <field resource="mac_address" type="string" target="macaddress"/>
                 <field resource="cpu_count" type="integer" target="cpucount"/>
-                <field resource="cpu_core_count" type="interger" target="cpucore"/>
+                <field resource="cpu_core_count" type="integer" target="cpucore"/>
                 <field resource="cpu_speed" type="integer" target="cpupower"/>
                 <field resource="ram" type="float" target="memory"/>
                 <field resource="disk_space" type="float" target="hddsize"/>
