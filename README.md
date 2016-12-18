@@ -16,7 +16,8 @@ This repository contains sample script that link ServiceNow and Device42 back an
 
 ### Usage
 -----------------------------
-	* For proper run script you need to add mapping.xml, then put fields as in sample.
+	* For proper run script you need to add mapping.xml, then put credentials and fields as in sample.
+	* Put <task> enable attribute to true for tasks that you want to run.
 	* (!IMPORTANT) For each ServiceNow table that in mapping.xml you should add 'u_device42_id' custom field.
 
 Run the script and enjoy! (`python sync.py`)

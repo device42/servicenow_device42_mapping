@@ -1,13 +1,13 @@
 <meta>
     <settings>
         <servicenow
-                url="https://expresstrial00318.service-now.com"
-                user="test"
-                password="qwe123qwe"/>
+                url=""
+                user=""
+                password=""/>
         <device42
-                url="https://158.69.157.16"
-                user="admin"
-                password="adm!nd42"/>
+                url=""
+                user=""
+                password=""/>
     </settings>
 
     <tasks>
