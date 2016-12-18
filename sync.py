@@ -1,8 +1,34 @@
 import json
 import base64
 import requests
-import xml.etree.ElementTree as etree
-from fns import *
+import xml.etree.ElementTree as eTree
+from lib import *
+
+
+class Mapping:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def get_d42_api_url(model):
+        return {
+            'device': '/api/1.0/devices/all',
+            'hardware': '/api/1.0/hardwares/',
+            'service': '/api/1.0/services/',
+            'software': '/api/1.0/software/',
+            'company': '/api/1.0/vendors/',
+
+        }[model]
+
+    @staticmethod
+    def get_snow_api_url(model):
+        return {
+            'device': '/api/now/table/cmdb_ci_server',
+            'hardware': '/api/now/table/cmdb_ci_hardware',
+            'service': '/api/now/table/cmdb_ci_service',
+            'software': '/api/now/table/cmdb_ci_spkg',
+            'company': '/api/now/table/core_company',
+        }[model]
 
 
 class Service:
@@ -65,30 +91,26 @@ def init_services(settings):
         'device42': Device42(settings.find('device42'))
     }
 
+
 def task_execute(task, services):
     print 'Execute task:', task.attrib['description']
 
-    _resource = task.find('api/resource')
-    _target = task.find('api/target')
-
-    if _resource.attrib['target'] == 'serviceNow':
-        resourceAPI = services['serviceNow']
-        targetAPI = services['device42']
-    else:
-        resourceAPI = services['device42']
-        targetAPI = services['serviceNow']
-
-
+    resource_api = services['device42']
+    target_api = services['serviceNow']
 
     mapping = task.find('mapping')
-    source = resourceAPI.request(_resource.attrib['path'], _resource.attrib['method'])
-    globals()[mapping.attrib['callback']](source, mapping, _target, _resource, targetAPI, resourceAPI)
+    mapping_api = Mapping()
+    source = resource_api.request(
+        mapping_api.get_d42_api_url(mapping.attrib['model']),
+        'GET'
+    )
+    globals()[mapping.attrib['callback']](source, mapping, mapping_api, target_api, resource_api)
 
 
 print 'Running...'
 
 # Load mapping
-config = etree.parse('mapping.xml')
+config = eTree.parse('mapping.xml')
 meta = config.getroot()
 
 # Init transports services

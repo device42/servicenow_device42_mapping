@@ -25,3 +25,15 @@ If you have any questions - feel free to reach out to us at support at device42.
 ### Compatibility
 -----------------------------
     * Script runs on Linux and Windows
+
+
+### Gotchas
+-----------------------------
+
+   * mapping.xml - file from where we get fields relations between D42 and ServiceNow
+   * lib.py - file with integration description, we describe how fields should be migrated
+   * sync.py - initialization and processing file, where we prepare API calls
+
+
+### To Do
+-----------------------------
