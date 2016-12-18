@@ -29,7 +29,7 @@ If you have any questions - feel free to reach out to us at support at device42.
     * Script runs on Linux and Windows
 
 
-### Gotchas
+### Info
 -----------------------------
     * mapping.xml - file from where we get fields relations between D42 and ServiceNow
     * lib.py - file with integration description, we describe how fields should be migrated
@@ -40,3 +40,4 @@ If you have any questions - feel free to reach out to us at support at device42.
 -----------------------------
 
     * add customers integration
+    * add error advance error handling
