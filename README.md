@@ -7,18 +7,16 @@ This repository contains sample script that link ServiceNow and Device42 back an
 -----------------------------
     * This script works with Device42 10.5.0.1473709546 and above
 
-
 ### Requirements
 -----------------------------
     * python 2.7.x
     * requests (you can install it with pip install requests or apt-get install python-requests)
 
-
 ### Usage
 -----------------------------
-	* For proper run script you need to add mapping.xml, then put credentials and fields as in sample.
-	* Put <task> enable attribute to true for tasks that you want to run.
-	* (!IMPORTANT) For each ServiceNow table that in mapping.xml you should add 'u_device42_id' custom field.
+	* For proper run script you need to add mapping.xml, then put credentials and fields as in sample
+	* (!IMPORTANT) For each ServiceNow table that in mapping.xml you should add 'u_device42_id' custom field
+	* For proper run script you need to edit mapping.xml, put fields as in sample
 
 Run the script and enjoy! (`python sync.py`)
 If you have any questions - feel free to reach out to us at support at device42.com
@@ -38,6 +36,4 @@ If you have any questions - feel free to reach out to us at support at device42.
 
 ### To Do
 -----------------------------
-
-    * add customers integration
-    * add error advance error handling
+    * add advanced error handling

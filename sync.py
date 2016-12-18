@@ -5,32 +5,6 @@ import xml.etree.ElementTree as eTree
 from lib import *
 
 
-class Mapping:
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def get_d42_api_url(model):
-        return {
-            'device': '/api/1.0/devices/all',
-            'hardware': '/api/1.0/hardwares/',
-            'service': '/api/1.0/services/',
-            'software': '/api/1.0/software/',
-            'company': '/api/1.0/vendors/',
-
-        }[model]
-
-    @staticmethod
-    def get_snow_api_url(model):
-        return {
-            'device': '/api/now/table/cmdb_ci_server',
-            'hardware': '/api/now/table/cmdb_ci_hardware',
-            'service': '/api/now/table/cmdb_ci_service',
-            'software': '/api/now/table/cmdb_ci_spkg',
-            'company': '/api/now/table/core_company',
-        }[model]
-
-
 class Service:
     def __init__(self, settings):
         self.user = settings.attrib["user"]
@@ -47,16 +21,20 @@ class ServiceNow(Service):
 
         result = {}
         if method == 'GET':
-            response = requests.get(self.url + path, auth=(self.user, self.password), headers=headers)
+            response = requests.get(self.url + path, auth=(self.user, self.password),
+                                    headers=headers, verify=False)
             result = response.json()
         elif method == 'POST':
-            response = requests.post(self.url + path, {}, data, auth=(self.user, self.password), headers=headers)
+            response = requests.post(self.url + path, {}, data, auth=(self.user, self.password),
+                                     headers=headers, verify=False)
             result = response.json()
         elif method == 'PUT':
-            response = requests.put(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
+            response = requests.put(self.url + path, json.dumps(data), auth=(self.user, self.password),
+                                    headers=headers, verify=False)
             result = response.json()
         elif method == 'PATCH':
-            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
+            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password),
+                                      headers=headers, verify=False)
             result = response.json()
         return result
 
@@ -71,16 +49,20 @@ class Device42(Service):
         result = None
 
         if method == 'GET':
-            response = requests.get(self.url + path, headers=headers, verify=False)
+            response = requests.get(self.url + path,
+                                    headers=headers, verify=False)
             result = response.json()
         elif method == 'POST':
-            response = requests.post(self.url + path, data, headers=headers, verify=False)
+            response = requests.post(self.url + path, data,
+                                     headers=headers, verify=False)
             result = response.json()
         elif method == 'PUT':
-            response = requests.put(self.url + path, data, headers=headers, verify=False)
+            response = requests.put(self.url + path, data,
+                                    headers=headers, verify=False)
             result = response.json()
         elif method == 'PATCH':
-            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password), headers=headers)
+            response = requests.patch(self.url + path, json.dumps(data), auth=(self.user, self.password),
+                                      headers=headers, verify=False)
             result = response.json()
         return result
 
@@ -95,16 +77,19 @@ def init_services(settings):
 def task_execute(task, services):
     print 'Execute task:', task.attrib['description']
 
-    resource_api = services['device42']
-    target_api = services['serviceNow']
+    _resource = task.find('api/resource')
+    _target = task.find('api/target')
+
+    if _resource.attrib['target'] == 'serviceNow':
+        resource_api = services['serviceNow']
+        target_api = services['device42']
+    else:
+        resource_api = services['device42']
+        target_api = services['serviceNow']
 
     mapping = task.find('mapping')
-    mapping_api = Mapping()
-    source = resource_api.request(
-        mapping_api.get_d42_api_url(mapping.attrib['model']),
-        'GET'
-    )
-    globals()[mapping.attrib['callback']](source, mapping, mapping_api, target_api, resource_api)
+    source = resource_api.request(_resource.attrib['path'], _resource.attrib['method'])
+    globals()[mapping.attrib['callback']](source, mapping, _target, _resource, target_api, resource_api)
 
 
 print 'Running...'
