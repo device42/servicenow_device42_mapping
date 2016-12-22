@@ -34,6 +34,8 @@ If you have any questions - feel free to reach out to us at support at device42.
     * sync.py - initialization and processing file, where we prepare API calls
 
 
-### To Do
+### Support
 -----------------------------
-    * add advanced error handling
+    This ServiceNow mapping / sync script is provided as-is without any support. We do provide fee-based professional services/support if you need help with this script.  To find out more please email sales@device42.com with subject ServiceNow script support.
+
+
