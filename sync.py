@@ -4,6 +4,9 @@ import requests
 import xml.etree.ElementTree as eTree
 from lib import *
 
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 
 class Service:
     def __init__(self, settings):
