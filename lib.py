@@ -126,9 +126,17 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
                         break
 
                 if parent is None:
-                    parent = target_api.request(field.attrib['checker'], 'POST', {
+                    post_object = {
                         'name': row[field.attrib['resource']],
-                    })['result']['sys_id']
+                    }
+
+                    # special cases
+                    if field.attrib['resource'] == 'manufacturer':
+                        post_object.update({'manufacturer': True})
+                    if field.attrib['resource'] == 'vendor':
+                        post_object.update({'vendor': True})
+
+                    parent = target_api.request(field.attrib['checker'], 'POST', post_object)['result']['sys_id']
 
                 result = parent
                 if 'checker2' in field.attrib and field.attrib['resource2'] in row:
@@ -141,9 +149,18 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
                             break
 
                     if child is None:
-                        child = target_api.request(field.attrib['checker2'], 'POST', {
-                            'name': row[field.attrib['resource2']]
-                        })['result']['sys_id']
+
+                        post_object = {
+                            'name': row[field.attrib['resource2']],
+                        }
+
+                        # special cases
+                        if field.attrib['resource'] == 'manufacturer':
+                            post_object.update({'manufacturer': parent})
+                        if field.attrib['resource'] == 'vendor':
+                            post_object.update({'vendor': parent})
+
+                        child = target_api.request(field.attrib['checker2'], 'POST', post_object)['result']['sys_id']
 
                     result = child
 
