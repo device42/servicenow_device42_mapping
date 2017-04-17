@@ -16,6 +16,7 @@ This repository contains script that helps you sync data between servicenow and 
 -----------------------------
 	* Copy mapping.xml.sample to mapping.xml, then put credentials and fields that you want to sync as in sample
 	* (!IMPORTANT) For each ServiceNow table that in mapping.xml you should add 'u_device42_id' custom field in your servicenow instance
+	* (!IMPORTANT) If you want to see "Impact Chart" in ServiceNow, you should add 'u_device42_impact_link' custom field in your servicenow instance
 	* Run the script! (`python sync.py`)
 
 ### Compatibility

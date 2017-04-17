@@ -176,6 +176,9 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
                                             _target.attrib['update_method'], data)
         else:
             data['u_device42_id'] = row[key]
+            if _resource.attrib['path'] in ['/api/1.0/buildings/', '/api/1.0/rooms/']:
+                data['u_device42_impact_link'] = '%s/admin/rackraj/building/impactgraph/%s/' % (resource_api.url, row[key])
+
             api_result = target_api.request(_target.attrib['path'], _target.attrib['method'], data)
 
         if DEBUG:
