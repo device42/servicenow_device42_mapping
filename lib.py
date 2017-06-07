@@ -89,7 +89,13 @@ def to_d42(source, mapping, _target, _resource, target_api, resource_api):
 def from_d42(source, mapping, _target, _resource, target_api, resource_api):
     source_key = mapping.attrib['source']
     key = mapping.attrib['key']
-    for row in source[source_key]:
+
+    if source_key == '':
+        mapped_source = source
+    else:
+        mapped_source = source[source_key]
+
+    for row in mapped_source:
         data = {}
         fields = mapping.findall('field')
         # check current device in already linked devices
