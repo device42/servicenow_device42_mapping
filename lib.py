@@ -123,6 +123,14 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
                     data[field.attrib['target']] = \
                         typer(field.attrib['type'], row[field.attrib['resource']][int(field.attrib['element'])]['ip'])
 
+            elif field.attrib['resource'] == 'custom_fields':
+                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None] 
+                if len(row[field.attrib['resource']]) > 0:
+                    for x in row[field.attrib['resource']]:
+                        if x['key'] == str(field.attrib['key']):
+                            data[field.attrib['target']] = typer(field.attrib['type'], x['value'])
+                            continue
+
             elif field.attrib['resource'] == 'tags':
                 data[field.attrib['target']] = ', '.join(row[field.attrib['resource']])
 
