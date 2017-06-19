@@ -83,24 +83,26 @@ def to_d42(source, mapping, _target, _resource, target_api, resource_api):
                 'u_device42_id': api_result['msg'][1]
             })
 
-        print '.\n'
+        print '.'
 
 
 def from_d42(source, mapping, _target, _resource, target_api, resource_api):
     source_key = mapping.attrib['source']
     key = mapping.attrib['key']
 
-    if source_key == '':
-        mapped_source = source
+    if source_key == '' or source_key not in source:
+        mapped_source = [source,]
     else:
         mapped_source = source[source_key]
 
     for row in mapped_source:
+
         data = {}
         fields = mapping.findall('field')
         # check current device in already linked devices
         linked_objects = get_linked_objects(_target, target_api)
-        linked_sys_id = linked_objects[str(row[key])] if str(row[key]) in linked_objects else None
+
+        linked_sys_id = linked_objects[str(row[key])] if linked_objects and str(row[key]) in linked_objects else None
         for field in fields:
             if field.attrib['resource'] not in row or row[field.attrib['resource']] is None:
                 continue
@@ -110,11 +112,13 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
                                                      row[field.attrib['resource']]) + ' copied from Device42'
 
             elif field.attrib['resource'] == 'mac_addresses':
+                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None] 
                 if len(row[field.attrib['resource']]) > 0:
                     data[field.attrib['target']] = \
                         typer(field.attrib['type'], row[field.attrib['resource']][int(field.attrib['element'])]['mac'])
 
             elif field.attrib['resource'] == 'ip_addresses':
+                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None] 
                 if len(row[field.attrib['resource']]) > 0:
                     data[field.attrib['target']] = \
                         typer(field.attrib['type'], row[field.attrib['resource']][int(field.attrib['element'])]['ip'])
@@ -191,5 +195,4 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
             print data
             print api_result
 
-        print '.\n'
-
+        print '.'
