@@ -49,7 +49,7 @@ def to_d42(source, mapping, _target, _resource, target_api, resource_api):
                 sub_field_objects = resource_api.request(sub_link, 'GET')['result']
                 data[field.attrib['target']] = typer(field.attrib['type'], sub_field_objects[field.attrib['sub_field']])
 
-                if 'sub_field2' in field.attrib:
+                if 'sub_field2' in field.attrib and 'link' in sub_field_objects[field.attrib['sub_field']]:
                     sub_link2 = re.search(r'.service-now.com(.+)', sub_field_objects[field.attrib['sub_field']]['link'])
                     sub_link2 = sub_link2.group(1)
                     sub_field2_objects = resource_api.request(sub_link2, 'GET')['result']
@@ -113,19 +113,19 @@ def from_d42(source, mapping, _target, _resource, target_api, resource_api):
                                                      row[field.attrib['resource']]) + ' copied from Device42'
 
             elif field.attrib['resource'] == 'mac_addresses':
-                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None] 
+                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None]
                 if len(row[field.attrib['resource']]) > 0:
                     data[field.attrib['target']] = \
                         typer(field.attrib['type'], row[field.attrib['resource']][int(field.attrib['element'])]['mac'])
 
             elif field.attrib['resource'] == 'ip_addresses':
-                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None] 
+                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None]
                 if len(row[field.attrib['resource']]) > 0:
                     data[field.attrib['target']] = \
                         typer(field.attrib['type'], row[field.attrib['resource']][int(field.attrib['element'])]['ip'])
 
             elif field.attrib['resource'] == 'custom_fields':
-                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None] 
+                row[field.attrib['resource']] = [x for x in row[field.attrib['resource']] if x is not None]
                 if len(row[field.attrib['resource']]) > 0:
                     for x in row[field.attrib['resource']]:
                         if x['key'] == str(field.attrib['key']):
