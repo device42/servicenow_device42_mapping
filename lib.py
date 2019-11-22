@@ -43,7 +43,7 @@ def to_d42(source, mapping, _target, _resource, target_api, resource_api):
                                                      row[field.attrib['resource']]) + ' copied from ServiceNow'
 
             # D42
-            elif 'sub_field' in field.attrib and 'link' in field.attrib['resource']:
+            elif 'sub_field' in field.attrib and 'link' in row[field.attrib['resource']]:
                 sub_link = re.search(r'.service-now.com(.+)', row[field.attrib['resource']]['link'])
                 sub_link = sub_link.group(1)
                 sub_field_objects = resource_api.request(sub_link, 'GET')['result']
