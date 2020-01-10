@@ -48,5 +48,31 @@
             </mapping>
         </task>
 
+        <task enable="false" description="Copy from Device42 to Servicenow">
+            <api>
+                <target target="serviceNow" method="POST" update_method="PATCH" path="/api/now/table/cmdb_ci_aix_server"/>
+                <resource model="device" target="device42" method="GET" path="/api/1.0/devices/all"/>
+            </api>
+
+            <mapping callback="from_d42" key="device_id" source="Devices">
+                <field resource="name" type="string" target="name"/>
+                <field resource="serial_no" type="string" target="serial_number"/>
+                <field resource="service_level" type="string" target="classification"/>
+                <field resource="tags" type="string" target="asset_tag"/>
+                <field resource="custom_fields" type="string" target="u_custom_field_name" key="test2"/>
+                <field resource="mac_addresses" type="string" target="mac_address" element="0"/>
+                <field resource="cpucount" type="integer" target="cpu_count"/>
+                <field resource="cpucore" type="interger" target="cpu_core_count"/>
+                <field resource="cpuspeed" type="integer" target="cpu_speed"/>
+                <field resource="ram" type="float" target="ram"/>
+                <field resource="hddsize" type="float" target="disk_space"/>
+                <field resource="os" type="string" target="os"/>
+                <field resource="osver" type="string" target="os_version"/>
+                <field resource="notes" type="string" target="short_description"/>
+                <field resource="manufacturer" checker="/api/now/table/core_company"
+                       resource2="hw_model" checker2="/api/now/table/cmdb_model" target="model_id"/>
+            </mapping>
+        </task>
+
     </tasks>
 </meta>
