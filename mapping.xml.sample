@@ -11,10 +11,9 @@
     </settings>
 
     <tasks>
-
-        <task enable="true" description="Copy from Servicenow to Device42">
+          <task enable="true" description="Copy from servicenow to Device42 (cmdb_ci_server)">
             <api>
-                <resource target="serviceNow" method="GET" path="/api/now/table/cmdb_ci_aix_server"/>
+                <resource target="serviceNow" method="GET" path="/api/now/table/cmdb_ci_server"/>
                 <target model="device" target="device42" method="POST" update_method="PUT" path="/api/1.0/device/"/>
             </api>
 
@@ -22,7 +21,7 @@
                 <field resource="name" type="string" target="name"/>
                 <field resource="serial_number" type="string" target="serial_no"/>
                 <field resource="classification" type="string" target="service_level"/>
-                <field resource="asset_tag" type="string" target="tags"/>
+                <field resource="asset_tag" type="string" target="asset_no"/>
                 <field resource="mac_address" type="string" target="macaddress"/>
                 <field resource="cpu_count" type="integer" target="cpucount"/>
                 <field resource="cpu_core_count" type="integer" target="cpucore"/>
@@ -34,6 +33,18 @@
                 <field resource="short_description" type="string" target="notes"/>
                 <field resource="model_id" sub_field="manufacturer" sub_field2="name" type="string" target="manufacturer"/>
                 <field resource="model_id" sub_field="name" type="string" target="hardware"/>
+            </mapping>
+        </task>
+
+        <task enable="true" description="Copy from Servicenow to Device42 (Vendors)">
+            <api>
+                <resource target="serviceNow" method="GET" path="/api/now/table/core_company"/>
+                <target model="company" target="device42" method="POST" update_method="PUT" path="/api/1.0/vendors/"/>
+            </api>
+
+            <mapping callback="to_d42" key="name">
+                <field resource="name" type="string" target="name"/>
+                <field resource="website" type="string" target="homepage"/>
             </mapping>
         </task>
 
@@ -60,18 +71,6 @@
                 <field resource="notes" type="string" target="short_description"/>
                 <field resource="manufacturer" checker="/api/now/table/core_company"
                        resource2="hw_model" checker2="/api/now/table/cmdb_model" target="model_id"/>
-            </mapping>
-        </task>
-
-        <task enable="false" description="Copy from Servicenow to Device42">
-            <api>
-                <resource target="serviceNow" method="GET" path="/api/now/table/core_company"/>
-                <target model="company" target="device42" method="POST" update_method="PUT" path="/api/1.0/vendors/"/>
-            </api>
-
-            <mapping callback="to_d42" key="name">
-                <field resource="name" type="string" target="name"/>
-                <field resource="website" type="string" target="homepage"/>
             </mapping>
         </task>
 
